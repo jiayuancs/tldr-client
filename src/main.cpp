@@ -3,6 +3,9 @@
 
 #include "cxxopts.hpp"
 
+#include "config.h"
+#include "page.h"
+
 int main(int argc, char **argv) {
 
   cxxopts::Options options("tldr", "A tiny tldr client. More information: https://github.com/jiayuancs/tldr-client.");
@@ -38,5 +41,42 @@ int main(int argc, char **argv) {
     return 0;
   }
 
+  string suffix{};
+  if (result.count("suffix")) {
+    suffix = result["suffix"].as<std::string>();
+  }
+  // Read or create config file, set global variables, should be called 
+  // before processing other arguments.
+  tldr::config::init_config(suffix);
+
+  if (result.count("update")) {
+    // TODO: download tldr pages if not exist
+    if (!std::filesystem::exists(tldr::config::git_repo_path)) {
+      std::cout << "No database.\n";
+      std::cout << "Try: git clone " << tldr::config::git_repo_url << " " << tldr::config::git_repo_path << std::endl;
+      return 0;
+    }
+
+    // TODO: update tldr pages
+    std::cout << "This option is not implemented yet.\n";
+    string git_repo_path = tldr::config::cache_path + "/" + tldr::config::git_repo_name;
+    std::cout << "Try: cd " << git_repo_path << " && git pull && cd -" << std::endl;
+    return 0;
+  }
+
+  if (result.count("command")) {
+    // Show the usage of command
+    string command = result["command"].as<std::string>();
+    tldr::Page page{command};
+    if (!page.Show()) {
+      std::cout << "No tldr entry for " << command << std::endl;
+      std::cout << "Try: " << *argv << " -u" << std::endl;
+    }
+
+    return 0;
+  }
+
+  // Show the usage of tldr
+  std::cout << options.help() << std::endl;
   return 0;
 }
