@@ -1,0 +1,25 @@
+{
+  "name": "tldr-client",
+  "version": "0.0.0",
+  "description": "a tiny tldr client",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "version": "conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/jiayuancs/tldr-client.git"
+  },
+  "keywords": [
+    "tldr",
+    "client",
+    "cpp"
+  ],
+  "author": "jiayuancs",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jiayuancs/tldr-client/issues"
+  },
+  "homepage": "https://github.com/jiayuancs/tldr-client#readme"
+}
