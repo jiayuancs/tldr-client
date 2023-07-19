@@ -5,6 +5,7 @@
 
 #include "config.h"
 #include "page.h"
+#include "version.h"
 
 int main(int argc, char **argv) {
 
@@ -37,7 +38,9 @@ int main(int argc, char **argv) {
   }
 
   if (result.count("version")) {
-    std::cout << "tldr version 0.1.0" << std::endl;
+    std::cout << "tldr version " << PROJECT_VERSION_MAJOR << '.'
+              << PROJECT_VERSION_MINOR << '.' << PROJECT_VERSION_PATCH
+              << std::endl;
     return 0;
   }
 
