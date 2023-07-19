@@ -1,3 +1,12 @@
+## [0.2.1](https://github.com/jiayuancs/tldr-client/compare/v0.2.0...v0.2.1) (2023-07-19)
+
+
+### Bug Fixes
+
+* **version:** generate version.h automatically before compilation ([af3161c](https://github.com/jiayuancs/tldr-client/commit/af3161c9f4d52fe335cba02e355d317fad9a5795))
+
+
+
 # 0.2.0 (2023-07-18)
 
 
