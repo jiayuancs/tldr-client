@@ -21,7 +21,10 @@ configure_file(
 
 set(CMAKE_CXX_STANDARD 17)
 
-set(CMAKE_BUILD_TYPE Release)
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release)
+endif()
+message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
 aux_source_directory(./src SRC)
 include_directories(./include ./third_party/cxxopts/include)

@@ -8,7 +8,7 @@
       // path to the executable
       "program": "${workspaceFolder}/build/bin/tldr",
       "args": [
-        "-h"
+        "su"
       ],
       "stopAtEntry": false,
       "cwd": "${fileDirname}",
