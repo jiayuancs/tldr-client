@@ -8,6 +8,14 @@
 #include "version.h"
 
 int main(int argc, char **argv) {
+  // Read or create config file.
+  tldr::Config config{};
+  try {
+    config.LoadConfig();
+  } catch (const std::exception &e) {
+    std::cerr << e.what() << std::endl;
+    return 1;
+  }
 
   cxxopts::Options options("tldr", "A tiny tldr client. More information: https://github.com/jiayuancs/tldr-client.");
   options.custom_help("[options]");
@@ -44,33 +52,35 @@ int main(int argc, char **argv) {
     return 0;
   }
 
-  string suffix{};
   if (result.count("suffix")) {
-    suffix = result["suffix"].as<std::string>();
+    string suffix = result["suffix"].as<std::string>();
+    config.SetSuffix(suffix);
   }
-  // Read or create config file, set global variables, should be called 
-  // before processing other arguments.
-  tldr::config::init_config(suffix);
+
+#ifndef NDEBUG
+  config.PrintLog();
+#endif  // NDEBUG
 
   if (result.count("update")) {
     // TODO: download tldr pages if not exist
-    if (!std::filesystem::exists(tldr::config::git_repo_path)) {
+    if (!std::filesystem::exists(config.GetGitRepoPath())) {
       std::cout << "No database.\n";
-      std::cout << "Try: git clone " << tldr::config::git_repo_url << " " << tldr::config::git_repo_path << std::endl;
+      std::cout << "Try: git clone " << config.GetGitRepoUrl() << " " << config.GetGitRepoPath() << std::endl;
       return 0;
     }
 
     // TODO: update tldr pages
     std::cout << "This option is not implemented yet.\n";
-    string git_repo_path = tldr::config::cache_path + "/" + tldr::config::git_repo_name;
-    std::cout << "Try: cd " << git_repo_path << " && git pull && cd -" << std::endl;
+    std::cout << "Try: cd " << config.GetGitRepoPath() << " && git pull && cd -" << std::endl;
     return 0;
   }
 
   if (result.count("command")) {
     // Show the usage of command
     string command = result["command"].as<std::string>();
-    tldr::Page page{command};
+    string page_path = config.GetCommandPagePath(command);
+
+    tldr::Page page{page_path, config.GetTheme()};
     if (!page.Show()) {
       std::cout << "No tldr entry for " << command << std::endl;
       std::cout << "Try: " << *argv << " -u" << std::endl;

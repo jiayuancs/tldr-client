@@ -3,7 +3,6 @@
 ## TODO
 
 - [ ] Support subcommand, such as `tldr git clone`
-- [ ] parse config file
 - [ ] auto download tldr pages if not exist
 - [ ] auto update tldr pages
 

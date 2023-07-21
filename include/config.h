@@ -7,35 +7,52 @@
 using std::string;
 
 namespace tldr {
-namespace config {
 
-extern string platform;
-extern string platform_common;
-extern string cache_path;
-extern string pages_path;
-extern string git_repo_path;
+struct Theme {
+  string title{"\033[1;37m"};             // bold; white
+  string title_modified_tag{"\033[33m"};  // yellow
+  string title_new_tag{"\033[32m"};       // green
+  string cmd_description{"\033[37m"};     // white
+  string code_description{"\033[32m"};    // green
+  string code{"\033[33m"};                // yellow
+  string code_placeholder{"\033[34m"};    // bule
+  string reset{"\033[0m"};
+};
 
-extern const string git_repo_name;
-extern string git_repo_url;
+class Config {
+ public:
+  Config() = default;
 
-namespace color {
+  // Load configuation from file, or create default configuation file if not exist.
+  void LoadConfig();
 
-extern string title;
-extern string title_modified_tag;
-extern string title_tag_new_tag;
-extern string cmd_description;
-extern string code_description;
-extern string code;
-extern string code_placeholder;
-extern string reset;
+  // Use pages.{{suffix}} as the default `tldr pages` directory.
+  void SetSuffix(const string &suffix);
 
-}  // namespace color
+  // Get the path of the page of the command.
+  string GetCommandPagePath(const string &command) const;
 
-// Read or create config file, set global variables.
-// `suffix` is the suffix of `tldr pages` directory.
-void init_config(string suffix);
+  string GetPlatform() const;
+  string GetGitRepoPath() const;
+  string GetPagesPath() const;
+  string GetGitRepoUrl() const;
+  Theme GetTheme() const;
 
-}  // namespace config
+#ifndef NDEBUG
+  void PrintLog() const;
+#endif  // NDEBUG
+
+ private:
+  string GetConfPath() const;
+
+  // TODO: Get platform automatically.
+  string platform_{"linux"};
+  string cache_path_;
+  string pages_suffix_{};
+  string git_repo_url_{"https://github.com/jiayuancs/tldr-pages.git"};
+  Theme theme_;
+};
+
 }  // namespace tldr
 
 #endif  // TLDR_CLIENT_INCLUDE_CONFIG_H_

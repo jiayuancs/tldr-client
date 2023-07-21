@@ -11,16 +11,15 @@ using std::string;
 
 namespace tldr {
 
+// Render a page.
 class Page {
  public:
-  Page(const string command) : command_(command) {}
-
+  Page(const string &page_path, const Theme &theme) : page_path_(page_path), theme_(theme) {}
   bool Show() const;
 
  private:
-  string command_;
-
-  string GetPagePath() const;
+  string page_path_;
+  Theme theme_;
 };
 
 }  // namespace tldr

@@ -3,21 +3,16 @@
 #include <filesystem>
 
 namespace fs = std::filesystem;
-namespace color = tldr::config::color;
 
 using std::ifstream;
 
 namespace tldr {
 
 bool Page::Show() const {
-  string page_path = GetPagePath();
-
-  // Page not found.
-  if (page_path.empty()) {
+  ifstream page_file{page_path_};
+  if (!page_file.is_open()) {
     return false;
   }
-
-  ifstream page_file{page_path};
 
   string buf;
   while (getline(page_file, buf)) {
@@ -29,22 +24,22 @@ bool Page::Show() const {
     bool last_line_cmd_desc = false;
     switch (buf[0]) {
       case '#':
-        std::cout << color::title << buf.substr(2) 
-                  << color::reset << "\n\n";
+        std::cout << theme_.title << buf.substr(2) 
+                  << theme_.reset << "\n\n";
 
         break;
       case '>':
-        std::cout << color::cmd_description << buf.substr(2) 
-                  << color::reset << "\n";
+        std::cout << theme_.cmd_description << buf.substr(2) 
+                  << theme_.reset << "\n";
         break;
       case '-':
-        std::cout << "\n" << color::code_description << buf 
-                  << color::reset << "\n";
+        std::cout << "\n" << theme_.code_description << buf 
+                  << theme_.reset << "\n";
         break;
       case '`': {
         auto idx = buf.find('`', 1);
         buf[idx] = '\0';
-        std::cout << "  " << color::code << buf.substr(1) << color::reset
+        std::cout << "  " << theme_.code << buf.substr(1) << theme_.reset
                   << "\n";
       }
       break;
@@ -57,21 +52,5 @@ bool Page::Show() const {
   return true;
 }
 
-string Page::GetPagePath() const {
-  string pages_path = config::pages_path + "/" + config::platform + 
-                      "/" + command_ + ".md";
-  string com_pages_path = config::pages_path + "/" + config::platform_common +
-                          "/" + command_ + ".md";
-
-  if (fs::exists(pages_path) && 
-      fs::is_regular_file(pages_path)) {
-    return pages_path;
-  } else if (fs::exists(com_pages_path) &&
-             fs::is_regular_file(com_pages_path)) {
-    return com_pages_path;
-  } else {
-    return "";
-  }
-}
 
 }  // namespace tldr
