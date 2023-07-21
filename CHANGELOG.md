@@ -1,3 +1,13 @@
+# [0.3.0](https://github.com/jiayuancs/tldr-client/compare/v0.2.1...v0.3.0) (2023-07-21)
+
+
+### Features
+
+* add the third-party library toml11 ([f53e520](https://github.com/jiayuancs/tldr-client/commit/f53e52002c36f6ae0f2aa793795f31e333e51dd3))
+* **config:** parse configuration file ([c42b503](https://github.com/jiayuancs/tldr-client/commit/c42b503d3e45929aa74153b79d5cdb451ac5b629))
+
+
+
 ## [0.2.1](https://github.com/jiayuancs/tldr-client/compare/v0.2.0...v0.2.1) (2023-07-19)
 
 
