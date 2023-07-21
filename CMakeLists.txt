@@ -27,7 +27,7 @@ endif()
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
 aux_source_directory(./src SRC)
-include_directories(./include ./third_party/cxxopts/include)
+include_directories(./include ./third_party/cxxopts/include ./third_party/toml11)
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 add_executable(${PROJECT_NAME} ${SRC})
