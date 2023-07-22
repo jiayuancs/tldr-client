@@ -8,49 +8,131 @@ using std::ifstream;
 
 namespace tldr {
 
-bool Page::Show() const {
+bool Page::Show() {
   ifstream page_file{page_path_};
   if (!page_file.is_open()) {
     return false;
   }
 
-  string buf;
-  while (getline(page_file, buf)) {
+  while (getline(page_file, current_line_)) {
+    // delete blank characters.
+    Strim();
+
     // Ignore blank lines.
-    if (buf.empty()) {
+    if (current_line_.empty()) {
       continue;
     }
 
     bool last_line_cmd_desc = false;
-    switch (buf[0]) {
+    switch (current_line_[0]) {
       case '#':
-        std::cout << theme_.title << buf.substr(2) 
-                  << theme_.reset << "\n\n";
-
+        RenderTitle();
         break;
       case '>':
-        std::cout << theme_.cmd_description << buf.substr(2) 
-                  << theme_.reset << "\n";
+        RenderCmdDescription();
         break;
       case '-':
-        std::cout << "\n" << theme_.code_description << buf 
-                  << theme_.reset << "\n";
+        RenderCodeDescription();
         break;
-      case '`': {
-        auto idx = buf.find('`', 1);
-        buf[idx] = '\0';
-        std::cout << "  " << theme_.code << buf.substr(1) << theme_.reset
-                  << "\n";
-      }
-      break;
+      case '`':
+        RenderCode();
+        break;
       default:
         break;
     }
+    std::cout << current_line_ << std::endl;
   }
 
   std::cout << std::endl;
   return true;
 }
 
+void Page::Strim() {
+  StrimLeft();
+  StrimRight();
+}
+
+void Page::StrimLeft() {
+  size_t first = current_line_.find_first_not_of(kBlankChars);
+  current_line_.erase(0, first);
+}
+
+void Page::StrimRight() {
+  size_t last = current_line_.find_last_not_of(kBlankChars);
+  current_line_.erase(last + 1);
+}
+
+void Page::RenderTitle() {
+  // erase the first '#'.
+  current_line_.erase(0, 1);
+  StrimLeft();
+
+  current_line_.insert(0, theme_.title);
+
+  // [modified] tag theme.
+  auto pos = current_line_.find("[modified]");
+  if (pos != string::npos) {
+    string color = theme_.reset + theme_.title_modified_tag;
+    current_line_.insert(pos, color);
+  }
+
+  // [new] tag theme.
+  pos = current_line_.find("[new]");
+  if (pos != string::npos) {
+    string color = theme_.reset + theme_.title_new_tag;
+    current_line_.insert(pos, color);
+  }
+
+  current_line_.append(theme_.reset);
+
+  last_line_type_ = kTitle;
+}
+
+void Page::RenderCmdDescription() {
+  // erase the first '>'.
+  current_line_.erase(0, 1);
+  StrimLeft();
+
+  current_line_.insert(0, theme_.cmd_description);
+  current_line_.append(theme_.reset);
+
+  // Leave a blank line between the other paragraphs.
+  if (last_line_type_ != kCmdDescription) {
+    current_line_.insert(0, "\n");
+  }
+
+  last_line_type_ = kCmdDescription;
+}
+
+void Page::RenderCodeDescription() {
+  current_line_.insert(1, theme_.code_description);
+  current_line_.append(theme_.reset);
+
+  // Leave a blank line between the other paragraphs.
+  if (last_line_type_ != kCodeDescription) {
+    current_line_.insert(0, "\n");
+  }
+
+  last_line_type_ = kCodeDescription;
+}
+
+void Page::RenderCode() {
+  // erase the '`'.
+  current_line_.erase(0, 1);
+  current_line_.erase(current_line_.size() - 1, 1);
+
+  current_line_.insert(0, theme_.code);
+  current_line_.append(theme_.reset);
+
+  // Indent two space characters
+  current_line_.insert(0, "  ");
+
+  // Leave a blank line between the other paragraphs.
+  if (last_line_type_ != kCode) {
+    current_line_.insert(0, "\n");
+  }
+
+  last_line_type_ = kCode;
+}
 
 }  // namespace tldr
