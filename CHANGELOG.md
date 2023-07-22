@@ -1,3 +1,12 @@
+# [0.4.0](https://github.com/jiayuancs/tldr-client/compare/v0.3.0...v0.4.0) (2023-07-22)
+
+
+### Features
+
+* **page:** improve page rendering effect ([163f5ec](https://github.com/jiayuancs/tldr-client/commit/163f5ecefaf1dc0c1e049af20e30c8c40947dbbf))
+
+
+
 # [0.3.0](https://github.com/jiayuancs/tldr-client/compare/v0.2.1...v0.3.0) (2023-07-21)
 
 
