@@ -1,5 +1,7 @@
 #include "page.h"
 
+#include <regex>
+
 namespace tldr {
 
 bool Page::Show() {
@@ -123,6 +125,9 @@ void Page::RenderInlineCode() {
   current_line_.insert(0, theme_.inline_code);
   current_line_.append(theme_.reset);
 
+  // Render code placeholder.
+  RenderPlaceholder(theme_.inline_code);
+
   // Indent two space characters
   current_line_.insert(0, "  ");
 
@@ -152,6 +157,13 @@ void Page::RenderCodeBlock() {
   current_line_ = buf;
 
   last_line_type_ = kCodeBlock;
+}
+
+void Page::RenderPlaceholder(const string &end_theme) {
+  static const string kPlaceholder = "(\\{\\{.*?\\}\\})";
+  static const string fmt = theme_.code_placeholder + "$1" + end_theme;
+  std::regex reg{kPlaceholder};
+  current_line_ = std::regex_replace(current_line_, reg, fmt);
 }
 
 }  // namespace tldr

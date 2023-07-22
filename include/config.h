@@ -15,7 +15,7 @@ struct Theme {
   string cmd_description{"\033[37m"};     // white
   string code_description{"\033[32m"};    // green
   string inline_code{"\033[33m"};         // yellow
-  string code_placeholder{"\033[34m"};    // bule
+  string code_placeholder{"\033[36m"};    // cyan
   string code_block{"\033[34m"};          // bule
   string reset{"\033[0m"};
 };

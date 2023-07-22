@@ -36,8 +36,9 @@ class Page {
   void RenderTitle();
   void RenderCmdDescription();
   void RenderCodeDescription();
-  void RenderInlineCode();  // inline code.
-  void RenderCodeBlock();   // multiple lines of code.
+  void RenderInlineCode();                          // inline code.
+  void RenderCodeBlock();                           // multiple lines of code.
+  void RenderPlaceholder(const string &end_theme);  // code placeholder.
 
   string current_line_;
   Theme theme_;
