@@ -1,3 +1,13 @@
+# [0.5.0](https://github.com/jiayuancs/tldr-client/compare/v0.4.0...v0.5.0) (2023-07-22)
+
+
+### Features
+
+* **page:** support code placeholder ([9c28658](https://github.com/jiayuancs/tldr-client/commit/9c28658823e3ecf819acd6b1750b0e55d304fe63))
+* **page:** support multi-line code blocks ([148b47e](https://github.com/jiayuancs/tldr-client/commit/148b47e16713e6c8593e975c6369f482261335ed))
+
+
+
 # [0.4.0](https://github.com/jiayuancs/tldr-client/compare/v0.3.0...v0.4.0) (2023-07-22)
 
 
