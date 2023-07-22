@@ -14,10 +14,17 @@ project(
   VERSION ${CMAKE_MATCH_1}.${CMAKE_MATCH_2}.${CMAKE_MATCH_3}
   LANGUAGES CXX)
 
+set(VERSION_H_PATH "${PROJECT_SOURCE_DIR}/include/version.h")
+set(VERSION_H_IN_PATH "${PROJECT_SOURCE_DIR}/version.h.in")
+
+# Remove old version.h
+if (EXISTS ${VERSION_H_PATH})
+  message(STATUS "Removing old version.h")
+  file(REMOVE ${VERSION_H_PATH})
+endif()
+
 # Generate version.h
-configure_file(
-  "${PROJECT_SOURCE_DIR}/version.h.in"
-  "${PROJECT_SOURCE_DIR}/include/version.h")
+configure_file(${VERSION_H_IN_PATH} ${VERSION_H_PATH})
 
 set(CMAKE_CXX_STANDARD 17)
 
