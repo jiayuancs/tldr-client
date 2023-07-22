@@ -153,6 +153,12 @@ void Page::RenderCodeBlock() {
 
     buf.append("  " + current_line_ + "\n");
   }
+
+  // Erase the last '\n'.
+  if (buf[buf.size() - 1] == '\n') {
+    buf.erase(buf.size() - 1, 1);
+  }
+
   buf.append(theme_.reset);
   current_line_ = buf;
 
