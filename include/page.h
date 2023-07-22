@@ -7,6 +7,7 @@
 
 #include "config.h"
 
+using std::ifstream;
 using std::string;
 
 namespace tldr {
@@ -15,7 +16,7 @@ namespace tldr {
 class Page {
  public:
   Page(const string &page_path, const Theme &theme)
-      : page_path_(page_path), theme_(theme), last_line_type_(kNone) {}
+      : theme_(theme), last_line_type_(kNone), page_file_(page_path) {}
   bool Show();
 
  private:
@@ -25,7 +26,8 @@ class Page {
     kTitle,
     kCmdDescription,
     kCodeDescription,
-    kCode
+    kInlineCode,
+    kCodeBlock
   } last_line_type_;
 
   void Strim();
@@ -34,12 +36,13 @@ class Page {
   void RenderTitle();
   void RenderCmdDescription();
   void RenderCodeDescription();
-  void RenderCode();
+  void RenderInlineCode();  // inline code.
+  void RenderCodeBlock();   // multiple lines of code.
 
   string current_line_;
-  string page_path_;
   Theme theme_;
   const string kBlankChars{" \t"};
+  ifstream page_file_;
 };
 
 }  // namespace tldr

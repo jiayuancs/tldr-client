@@ -1,20 +1,13 @@
 #include "page.h"
 
-#include <filesystem>
-
-namespace fs = std::filesystem;
-
-using std::ifstream;
-
 namespace tldr {
 
 bool Page::Show() {
-  ifstream page_file{page_path_};
-  if (!page_file.is_open()) {
+  if (!page_file_.is_open()) {
     return false;
   }
 
-  while (getline(page_file, current_line_)) {
+  while (getline(page_file_, current_line_)) {
     // delete blank characters.
     Strim();
 
@@ -35,7 +28,11 @@ bool Page::Show() {
         RenderCodeDescription();
         break;
       case '`':
-        RenderCode();
+        if (current_line_[1] == '`' && current_line_[1] == current_line_[2]) {
+          RenderCodeBlock();
+        } else {
+          RenderInlineCode();
+        }
         break;
       default:
         break;
@@ -111,28 +108,50 @@ void Page::RenderCodeDescription() {
   // Leave a blank line between the other paragraphs.
   if (last_line_type_ != kCodeDescription) {
     current_line_.insert(0, "\n");
+  } else {
+    current_line_[0] = ' ';
   }
 
   last_line_type_ = kCodeDescription;
 }
 
-void Page::RenderCode() {
+void Page::RenderInlineCode() {
   // erase the '`'.
   current_line_.erase(0, 1);
   current_line_.erase(current_line_.size() - 1, 1);
 
-  current_line_.insert(0, theme_.code);
+  current_line_.insert(0, theme_.inline_code);
   current_line_.append(theme_.reset);
 
   // Indent two space characters
   current_line_.insert(0, "  ");
 
   // Leave a blank line between the other paragraphs.
-  if (last_line_type_ != kCode) {
+  if (last_line_type_ != kInlineCode) {
     current_line_.insert(0, "\n");
   }
 
-  last_line_type_ = kCode;
+  last_line_type_ = kInlineCode;
+}
+
+void Page::RenderCodeBlock() {
+  string buf = "\n" + theme_.code_block;
+
+  while (getline(page_file_, current_line_)) {
+    // end of code block.
+    if (current_line_.find("```") != string::npos) {
+      StrimLeft();
+      if (current_line_.find("```") == 0) {
+        break;
+      }
+    }
+
+    buf.append("  " + current_line_ + "\n");
+  }
+  buf.append(theme_.reset);
+  current_line_ = buf;
+
+  last_line_type_ = kCodeBlock;
 }
 
 }  // namespace tldr
