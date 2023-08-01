@@ -1,3 +1,12 @@
+# [0.6.0](https://github.com/jiayuancs/tldr-client/compare/v0.5.0...v0.6.0) (2023-08-01)
+
+
+### Bug Fixes
+
+* **page:** delete the extra blank line after the code block ([77fd323](https://github.com/jiayuancs/tldr-client/commit/77fd323b8f160d53e256a2c86a5c31b80b0f4f81))
+
+
+
 # [0.5.0](https://github.com/jiayuancs/tldr-client/compare/v0.4.0...v0.5.0) (2023-07-22)
 
 
