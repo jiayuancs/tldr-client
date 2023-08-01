@@ -16,7 +16,7 @@ struct Theme {
   string code_description{"\033[32m"};    // green
   string inline_code{"\033[33m"};         // yellow
   string code_placeholder{"\033[36m"};    // cyan
-  string code_block{"\033[34m"};          // bule
+  string code_block{"\033[36m"};          // cyan
   string reset{"\033[0m"};
 };
 
