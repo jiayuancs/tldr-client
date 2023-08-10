@@ -186,7 +186,7 @@ void Page::HandleBreakTag() {
   auto idx = current_line_.rfind(kBreakTag);
 
   // Clean last_line_type_ if the current line end with <break> tag.
-  if (idx == current_line_.size() - kBreakTag.size()) {
+  if (idx != string::npos && idx == current_line_.size() - kBreakTag.size()) {
     current_line_.erase(idx, kBreakTag.size());
     last_line_type_ = kNone;
   }
