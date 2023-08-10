@@ -40,6 +40,8 @@ class Page {
   void RenderCodeBlock();                           // multiple lines of code.
   void RenderPlaceholder(const string &end_theme);  // code placeholder.
 
+  void HandleBreakTag();  // handle the <break> tag.
+
   string current_line_;
   Theme theme_;
   const string kBlankChars{" \t"};

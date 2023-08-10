@@ -10,13 +10,16 @@ bool Page::Show() {
   }
 
   while (getline(page_file_, current_line_)) {
-    // delete blank characters.
+    // Delete blank characters.
     Strim();
 
     // Ignore blank lines.
     if (current_line_.empty()) {
       continue;
     }
+
+    // Handle the <break> tag.
+    HandleBreakTag();
 
     bool last_line_cmd_desc = false;
     switch (current_line_[0]) {
@@ -88,7 +91,7 @@ void Page::RenderTitle() {
 }
 
 void Page::RenderCmdDescription() {
-  // erase the first '>'.
+  // Erase the first '>'.
   current_line_.erase(0, 1);
   StrimLeft();
 
@@ -118,12 +121,18 @@ void Page::RenderCodeDescription() {
 }
 
 void Page::RenderInlineCode() {
-  // erase the '`'.
+  // Erase the first '`'.
   current_line_.erase(0, 1);
-  current_line_.erase(current_line_.size() - 1, 1);
-
   current_line_.insert(0, theme_.inline_code);
-  current_line_.append(theme_.reset);
+
+  // Erase the last '`' if exists.
+  int idx = current_line_.find_last_of("`");
+  if (idx != string::npos) {
+    current_line_.erase(idx, 1);
+    current_line_.insert(idx, theme_.reset);
+  } else {
+    current_line_.append(theme_.reset);
+  }
 
   // Render code placeholder.
   RenderPlaceholder(theme_.inline_code);
@@ -170,6 +179,17 @@ void Page::RenderPlaceholder(const string &end_theme) {
   static const string fmt = theme_.code_placeholder + "$1" + end_theme;
   std::regex reg{kPlaceholder};
   current_line_ = std::regex_replace(current_line_, reg, fmt);
+}
+
+void Page::HandleBreakTag() {
+  static const string kBreakTag = "<break>";
+  auto idx = current_line_.rfind(kBreakTag);
+
+  // Clean last_line_type_ if the current line end with <break> tag.
+  if (idx == current_line_.size() - kBreakTag.size()) {
+    current_line_.erase(idx, kBreakTag.size());
+    last_line_type_ = kNone;
+  }
 }
 
 }  // namespace tldr
