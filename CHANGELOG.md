@@ -1,3 +1,12 @@
+## [0.7.1](https://github.com/jiayuancs/tldr-client/compare/v0.7.0...v0.7.1) (2023-08-10)
+
+
+### Bug Fixes
+
+* handle the <break> tag correctly ([48870cc](https://github.com/jiayuancs/tldr-client/commit/48870cc56e0e63575ab7e8d42627e005275ee106))
+
+
+
 # [0.7.0](https://github.com/jiayuancs/tldr-client/compare/v0.6.0...v0.7.0) (2023-08-10)
 
 

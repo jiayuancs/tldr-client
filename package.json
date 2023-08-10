@@ -1,6 +1,6 @@
 {
   "name": "tldr-client",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "a tiny tldr client",
   "main": "index.js",
   "scripts": {
