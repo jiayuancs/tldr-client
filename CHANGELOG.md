@@ -1,3 +1,12 @@
+# [0.8.0](https://github.com/jiayuancs/tldr-client/compare/v0.7.1...v0.8.0) (2024-01-26)
+
+
+### Features
+
+* implement the '-u' command to update local pages ([edd1609](https://github.com/jiayuancs/tldr-client/commit/edd16097a321057a37d949c3826a70e24379ab1c))
+
+
+
 ## [0.7.1](https://github.com/jiayuancs/tldr-client/compare/v0.7.0...v0.7.1) (2023-08-10)
 
 
