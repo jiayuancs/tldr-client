@@ -1,10 +1,10 @@
-#include <iostream>
 #include <filesystem>
-
-#include "cxxopts.hpp"
+#include <iostream>
 
 #include "config.h"
+#include "cxxopts.hpp"
 #include "page.h"
+#include "utils.h"
 #include "version.h"
 
 int main(int argc, char **argv) {
@@ -17,16 +17,21 @@ int main(int argc, char **argv) {
     return 1;
   }
 
-  cxxopts::Options options("tldr", "A tiny tldr client. More information: https://github.com/jiayuancs/tldr-client.");
+  cxxopts::Options options("tldr",
+                           "A tiny tldr client. More information: "
+                           "https://github.com/jiayuancs/tldr-client.");
   options.custom_help("[options]");
   options.positional_help("[command]");
 
-  options.add_options("Available")
-  ("c,command", "show the usage of command", cxxopts::value<std::string>())
-  ("u,update", "update tldr pages", cxxopts::value<bool>())
-  ("s,suffix", "specify the suffix of `tldr pages` directory, such as `-s zh` for `pages.zh`", cxxopts::value<std::string>())
-  ("v,version", "show version", cxxopts::value<bool>())
-  ("h,help", "show this help message", cxxopts::value<bool>());
+  options.add_options("Available")("c,command", "show the usage of command",
+                                   cxxopts::value<std::string>())(
+      "u,update", "update tldr pages", cxxopts::value<bool>())(
+      "s,suffix",
+      "specify the suffix of `tldr pages` directory, such as `-s zh` for "
+      "`pages.zh`",
+      cxxopts::value<std::string>())("v,version", "show version",
+                                     cxxopts::value<bool>())(
+      "h,help", "show this help message", cxxopts::value<bool>());
 
   options.parse_positional({"command"});
 
@@ -34,7 +39,7 @@ int main(int argc, char **argv) {
   cxxopts::ParseResult result;
   try {
     result = options.parse(argc, argv);
-  } catch (const std::exception& e) {
+  } catch (const std::exception &e) {
     std::cerr << e.what() << std::endl << std::endl;
     std::cout << options.help() << std::endl;
     return 1;
@@ -62,16 +67,15 @@ int main(int argc, char **argv) {
 #endif  // NDEBUG
 
   if (result.count("update")) {
-    // TODO: download tldr pages if not exist
+    // Clone tldr pages if not exist
     if (!std::filesystem::exists(config.GetGitRepoPath())) {
-      std::cout << "No database.\n";
-      std::cout << "Try: git clone " << config.GetGitRepoUrl() << " " << config.GetGitRepoPath() << std::endl;
+      tldr::RunCmd(
+          {"git", "clone", config.GetGitRepoUrl(), config.GetGitRepoPath()});
       return 0;
     }
 
-    // TODO: update tldr pages
-    std::cout << "This option is not implemented yet.\n";
-    std::cout << "Try: cd " << config.GetGitRepoPath() << " && git pull && cd -" << std::endl;
+    // Update tldr pages
+    tldr::RunCmd({"git", "pull"}, config.GetGitRepoPath());
     return 0;
   }
 

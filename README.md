@@ -2,6 +2,10 @@
 
 A tiny tldr client.
 
+## Requirements
+
+- Git
+
 ## Install
 
 ```shell
