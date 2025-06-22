@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 4.0)
 
 # Extract major, minor and patch version from package.json
 file(READ "package.json" PACKAGE_JSON)
